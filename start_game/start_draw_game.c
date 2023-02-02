@@ -2,10 +2,8 @@
 
 void	dx_dy(t_cubd	*cubgame)
 {
-	cubgame->dx = radian(cubgame->pozition);
-	cubgame->dx = cos(cubgame->dx);
-	cubgame->dy = radian(cubgame->pozition);
-	cubgame->dy = -1 * sin(cubgame->dy);
+	cubgame->dx = cos(radian(cubgame->pozition));
+	cubgame->dy = -1 * sin(radian(cubgame->pozition));
 }
 
 void	search_null_mlx(t_cubd	*cubgame)
@@ -96,7 +94,6 @@ void	textur_drov_left_right(t_cubd	*cubgame)
 	i = 64;
 	cubgame->keypx = cubgame->keypx + 0.5;
 	cubgame->keypy = cubgame->keypy + 0.5;
-	printf("\n\n\n<<%d>>\n",cubgame->line_length[0]);
 	cubgame->dur = mlx_xpm_file_to_image(cubgame->init_mlx, "textures/door.xpm", &i, &i);
 	cubgame->key1 = mlx_xpm_file_to_image(cubgame->init_mlx, "textures/key_left.xpm", &i, &i);
 	cubgame->key2 = mlx_xpm_file_to_image(cubgame->init_mlx, "textures/key_right.xpm", &i, &i);
@@ -110,13 +107,12 @@ void	start_draw_game(t_cubd	*cubgame)
 		cubgame->sprite = '1';
 		cubgame->symbol = '0';
 	}
+	printf(" %s  \n",  (char*)cubgame->key2);
 	cubgame->init_mlx = mlx_init();
 	textur_drow_wall(cubgame);
 	textur_drov_left_right(cubgame);
-	printf("\n1=%s \n2=%s\n3=%s\n4=%s\ncubgame->dur=%s\ncubgame->key1=%s\ncubgame->dur=%s\n", cubgame->we,cubgame->no,cubgame->ea,cubgame->so,cubgame->dur,cubgame->key1,cubgame->dur);
+	printf("\n1=%s\n", (char*)cubgame->key2);
 	check_walk(cubgame);
-
-
 
 	game_mlx_norm2_for_all(cubgame);
 }

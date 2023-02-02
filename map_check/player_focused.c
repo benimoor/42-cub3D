@@ -16,6 +16,6 @@ double	radian(double degry)
 {
 	double	d;
 
-	d = degry * 3.14159 / 180;
+	d = degry * 3.14159 / 180.0;
 	return (d);
 }

@@ -12,7 +12,6 @@ void	ft_texture(t_cubd	*cubgame, char  *str, char c)
 	if (c == 'N')
 	{
 		cubgame->no = ft_strtrim(tmp, " ");
-// printf("\nNNNNNNNNNNNNN   [%s]\n",cubgame->no);
 	}
 	else if (c == 'S')
 		cubgame->so = ft_strtrim(tmp, " ");

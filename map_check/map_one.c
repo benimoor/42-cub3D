@@ -15,7 +15,7 @@ int player(char *str, t_cubd *cubgame)
 			cubgame->flag = 1;
 			cubgame->game_player = str[i];
 			cubgame->px = i + 0.5;
-			cubgame->py = cubgame->player_h + 0.5;
+			cubgame->py = cubgame->height + 0.5;
 			str[i] = '0';
 		}
 		else if (str[i] && (str[i] != 32 && str[i] != '1'
@@ -56,7 +56,7 @@ void	if_map_line_valid(t_cubd *cubgame, char	*str1, char *str2, char *str3)
 			i++;
 		if (str2[i] && str2[i] != '\n')
 		{
-			cubgame->i = i;
+			cubgame->zeros = i;
 			check_zero_around(cubgame, str1, str2, str3);
 			i++;
 		}

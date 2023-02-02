@@ -10,14 +10,15 @@ void	sprite_for_norm(t_cubd *cubgame)
 	cubgame->bonus.i = cubgame->slayd_y * cubgame->bonus.x_x + cubgame->slayd_x * cubgame->bonus.y_y;
 	cubgame->bonus.j = cubgame->slayd_x * cubgame->bonus.x_x - cubgame->slayd_y * cubgame->bonus.y_y;
 	cubgame->b = cubgame->bonus.j;
+	
 }
 
 double	angl(double	t)
 {
 	if (t >= 360)
-		return (360 - t);
-	if (t < 0)
-		return (306 + t);
+		return (t - 360);
+	if (t <= -1)
+		return (360 + t);
 	return (t);
 }
 
@@ -37,41 +38,16 @@ void	game_drow1_sprite(t_cubd *cubgame)
 		cubgame->bonus.t_x_step = 63.0 / cubgame->bonus.scale;
 		cubgame->bonus.t_y_step = 64.0 / cubgame->bonus.scale;
 	}
-	cubgame->bonus.routa = angl(cubgame->pozition + 30);
 }
 
-void	func_cos_vert_plus(t_cubd *cubgame)
-{
-	cubgame->bonus.z = 5;
-	cubgame->bonus.r_x = (((int)cubgame->bonus.px >> 6) << 6) + 64;
-	cubgame->bonus.r_y = (cubgame->bonus.px - cubgame->bonus.r_x) * cubgame->bonus.tan_ra + cubgame->bonus.py;
-	cubgame->bonus.x_o = 64;
-	cubgame->bonus.y_o = -64 * cubgame->bonus.tan_ra;
-}
-
-void	func_cos_vert_minus(t_cubd *cubgame)
-{
-	cubgame->bonus.z = 4;
-	cubgame->bonus.r_x = (((int)cubgame->bonus.px >> 6) << 6) -0.0001;
-	cubgame->bonus.r_y = (cubgame->bonus.px - cubgame->bonus.r_x) * cubgame->bonus.tan_ra + cubgame->bonus.py;
-	cubgame->bonus.x_o = -64;
-	cubgame->bonus.y_o = 64 * cubgame->bonus.tan_ra;
-}
-
-void	func_cos_vert_noll(t_cubd *cubgame)
-{
-	cubgame->bonus.h_line = cubgame->width;
-	cubgame->bonus.r_x = cubgame->bonus.px;
-	cubgame->bonus.r_y = cubgame->bonus.py;
-}
-
-void	vertical_s_d_r_norm(t_cubd *cubgame, char *s)
+void	vertical_s_d_r_norm(t_cubd *cubgame, char s)
 {
 	cubgame->dis_t = cos(radian(cubgame->bonus.routa)) * (cubgame->bonus.r_x - cubgame->bonus.px)
 		- sin(radian(cubgame->bonus.routa)) * (cubgame->bonus.r_y - cubgame->bonus.py);
-	cubgame->i = cubgame->bonus.z;
-	if (*s == 'D')
-		cubgame->i = 6;
+
+	cubgame->zeros = cubgame->bonus.z;
+	if (s == 'D')
+		cubgame->zeros = 6;
 	cubgame->bonus.h_line = cubgame->width;
 }
 
@@ -80,16 +56,20 @@ void	game_drow2_vertical(t_cubd *cubgame)
 	int		x;
 	int		y;
 	char	s;
-
+// printf("cubgame->bonus.x_o = %f\n", cubgame->bonus.x_o);
+// printf("cubgame->bonus.y_o = %f\n", cubgame->bonus.y_o);
+// printf("%f pozition %f   cubgame->bonus.py  %f    %f\n",cubgame->bonus.routa,cubgame->px, cubgame->py, cubgame->a_l);
+	
 	while (cubgame->bonus.h_line < cubgame->width)
 	{
 		x = (int)cubgame->bonus.r_x >> 6;
 		y = (int)cubgame->bonus.r_y >> 6;
-		s_read(x, y, cubgame, &s);
+		s = s_read(x, y, cubgame);
 		if (s == '1' || s == 'D')
-			vertical_s_d_r_norm(cubgame, &s);
+			vertical_s_d_r_norm(cubgame, s);
 		else
 		{
+	// printf("cubgame->bonus.h_line %f             %f       %c\n",cubgame->bonus.r_x, cubgame->bonus.r_y, s);
 			cubgame->bonus.r_x = cubgame->bonus.r_x + cubgame->bonus.x_o;
 			cubgame->bonus.r_y = cubgame->bonus.r_y + cubgame->bonus.y_o;
 			cubgame->bonus.h_line = cubgame->bonus.h_line + 1;
@@ -149,121 +129,66 @@ void	sprite_drov(t_cubd *cubgame)
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void	vertical(t_cubd *cubgame)
 {
 	int	i;
 
 	i = 0;
+	cubgame->bonus.routa = angl(cubgame->pozition + 30);
 	cubgame->bonus.px = cubgame->px * 64;
 	cubgame->bonus.py = cubgame->py * 64;
+
+
 	while (i < cubgame->w_screen)
 	{
 		cubgame->dis_t = 1000000;
 		cubgame->all_i = i;
-		cubgame->bonus.tan_ra = tan(radian(cubgame->bonus.routa));
-		cubgame->bonus.h_line = 0;
-		if (cos(radian(cubgame->bonus.routa)) < -0.0001)
-			func_cos_vert_minus(cubgame);
-		else if (cos(radian(cubgame->bonus.routa)) > 0.0001)
-			func_cos_vert_plus(cubgame);
-		else if (cos(radian(cubgame->bonus.routa)) == 0)
-			func_cos_vert_noll(cubgame);
-		game_drow2_vertical(cubgame);
+/////vertical
+		// vertical_start(cubgame);
 
+	
+
+/////vertical
 		horizontal(cubgame);
+
+		// cubgame->dis_t *= cos(radian(angl(cubgame->pozition - cubgame->bonus.routa)));
+
+	
+		// if (cubgame->zeros > 3 && cubgame->zeros != 6)
+		// 	cubgame->bonus.r_a_y = (int)(cubgame->bonus.v_y) % 64;
+		// else
+		// 	cubgame->bonus.r_a_y = (int)(cubgame->bonus.r_x) % 64;
+
+
+
+		line_on_map_draw(cubgame);
 		sprite_drov(cubgame);
 		cubgame->bonus.routa = angl(cubgame->bonus.routa - cubgame->a_l);
 		i++;
 	}
 }
 
-void	horizon_pozition_y_plus(t_cubd *cubgame)
-{
-	cubgame->bonus.z_h = 2;
-	cubgame->bonus.r_y = (((int)cubgame->bonus.py >> 6) << 6) - 0.0001;
-	cubgame->bonus.r_x = (cubgame->bonus.py - cubgame->bonus.r_y) * cubgame->bonus.atan_ra + cubgame->bonus.px;
-	cubgame->bonus.y_o = -64;
-	cubgame->bonus.x_o = 64 * cubgame->bonus.atan_ra;
-}
 
-void	horizon_pozition_y_minus(t_cubd *cubgame)
-{
-	cubgame->bonus.z_h = 3;
-	cubgame->bonus.r_y = (((int)cubgame->bonus.px >> 6) << 6) + 64;
-	cubgame->bonus.r_x = (cubgame->bonus.py - cubgame->bonus.r_y) * cubgame->bonus.atan_ra + cubgame->bonus.px;
-	cubgame->bonus.y_o = 64;
-	cubgame->bonus.x_o = -64 * cubgame->bonus.atan_ra;
-}
-
-void	horizon_pozition_y_nol(t_cubd *cubgame)
-{
-	cubgame->bonus.h_line = cubgame->height;
-	cubgame->bonus.r_x = cubgame->bonus.px;
-	cubgame->bonus.r_y = cubgame->bonus.py;
-}
-
-void	horizontal_have_dor(t_cubd *cubgame, char s)
-{
-	double	des;
-
-	des = cos(radian(cubgame->bonus.routa)) * (cubgame->bonus.r_x - cubgame->bonus.px)
-		- sin(radian(cubgame->bonus.routa)) * (cubgame->bonus.r_y - cubgame->bonus.py);
-	if (des < cubgame->dis_t)
-	{
-		cubgame->i = cubgame->bonus.z_h;
-		if (s == 'D')
-			cubgame->bonus.i = 6;
-		cubgame->dis_t = des;
-	}
-	else
-	{
-		cubgame->bonus.r_x = cubgame->bonus.v_x;
-		cubgame->bonus.r_y = cubgame->bonus.v_y;
-	}
-	cubgame->bonus.h_line = cubgame->height;
-}
-
-void	horiontal_norm_1(t_cubd *cubgame)
-{
-	int		x;
-	int		y;
-	char	s;
-
-	while (cubgame->bonus.h_line < cubgame->height)
-	{
-		x = (int)cubgame->bonus.r_x >> 6;
-		y = (int)cubgame->bonus.r_y >> 6;
-		s_read(x, y, cubgame, &s);
-		if (s == '1' || s == 'D')
-			horizontal_have_dor(cubgame, s);
-		else
-		{
-			cubgame->bonus.r_x += cubgame->bonus.x_o;
-			cubgame->bonus.r_y += cubgame->bonus.y_o;
-			cubgame->bonus.h_line++;
-		}
-	}
-}
 
 int	t_r_g(int t1, int t2, int t3, int t4)
 {
 	return (t1 << 24 | t2 << 16 | t3 << 8 | t4);
 }
 
-void	pixel_set(t_cubd *cubgame, int i, int flag)
-{
-	int		x;
-	char	*ds_t;
-
-	ds_t = cubgame->ad[1] + ((i * cubgame->line_length[1]) + cubgame->all_i * (cubgame->bits_per_pixel[1] / 8));
-	if (flag == 0)
-	{
-		x = t_r_g(0, cubgame->c[0], cubgame->c[1], cubgame->c[2]);
-	}
-	else
-		x = t_r_g(0, cubgame->f[0], cubgame->f[1], cubgame->f[2]);
-	*(unsigned int *)ds_t = x;
-}
 
 void	pixel_set_11(t_cubd *cubgame, int i, int c)
 {
@@ -284,10 +209,33 @@ void	textur_set(t_cubd *cubgame, int i, int k)
 		return ;
 	x = cubgame->bonus.r_a_y;
 	k += cubgame->step_flag;
-	j = (k << 6) / cubgame->line_len;
-	ds_t = cubgame->ad[cubgame->bonus.z] + ((j * cubgame->line_length[cubgame->bonus.z]))
-		+ cubgame->all_i * (cubgame->bits_per_pixel[cubgame->bonus.z] / 8);
+	j = (k << 6) / cubgame->line_len ;
+	ds_t = cubgame->ad[cubgame->zeros] + ((j * cubgame->line_length[cubgame->zeros]))
+		+ cubgame->all_i * (cubgame->bits_per_pixel[cubgame->zeros] / 8);
 	pixel_set_11(cubgame, i, *(unsigned int *)ds_t);
+}
+void	pixel_set(t_cubd *cubgame, int i, int flag)
+{
+	int		x;
+	char	*ds_t;
+
+	ds_t = cubgame->ad[1] + ((i * cubgame->line_length[1]) + cubgame->all_i * (cubgame->bits_per_pixel[1] / 8));
+	if (flag == 0)
+	{
+		x = t_r_g(0, cubgame->c[0], cubgame->c[1], cubgame->c[2]);
+	}
+	else
+		x = t_r_g(0, cubgame->f[0], cubgame->f[1], cubgame->f[2]);
+	*(unsigned int *)ds_t = x;
+}
+
+void	my_mlx_pixel_put(t_cubd *game, int x, int y, int clr)
+{
+	char	*dst;
+
+	dst = game->ad[1] + ((y * game->line_length[1]) + x
+			* (game->bits_per_pixel[1] / 8));
+	*(unsigned int *)dst = clr;
 }
 
 void	line_on_map_draw1(t_cubd *cubgame, int h, int f)
@@ -295,16 +243,26 @@ void	line_on_map_draw1(t_cubd *cubgame, int h, int f)
 	int	k;
 	int	i;
 
-	k = -1;
+	k = -1; 
 	i = 0;
 	while (i < cubgame->h_screen)
 	{
 		if (i < f)
-			pixel_set(cubgame, i, 0);
+		{
+			my_mlx_pixel_put(cubgame, cubgame->all_i, i, 
+				t_r_g(0, cubgame->c[0], cubgame->c[1], cubgame->c[2]));
+			//pixel_set(cubgame, i, 0);
+		}
 		else if (i > h + f)
-			pixel_set(cubgame, i, 1);
+		{
+			my_mlx_pixel_put(cubgame, cubgame->all_i, i,
+				t_r_g(0, cubgame->f[0], cubgame->f[1], cubgame->f[2]));
+			//pixel_set(cubgame, i, 1);
+		}
 		else
+		{
 			textur_set(cubgame, i, k++);
+		}
 		i++;
 	}
 }
@@ -326,25 +284,8 @@ void	line_on_map_draw(t_cubd *cubgame)
 	line_on_map_draw1(cubgame, h, f);
 }
 
-void	horizontal(t_cubd *cubgame)
-{
-	cubgame->bonus.atan_ra = 1.0 / tan(radian(cubgame->bonus.routa));
-	cubgame->bonus.h_line = 0;
-	if (sin(radian(cubgame->bonus.routa)) > 0.0001)
-		horizon_pozition_y_plus(cubgame);
-	else if (sin(radian(cubgame->bonus.routa)) < -0.0001)
-		horizon_pozition_y_minus(cubgame);
-	else if (sin(radian(cubgame->bonus.routa)) < 0.0001 && sin(radian(cubgame->bonus.routa)) > -0.0001)
-		horizon_pozition_y_nol(cubgame);
 
-	horiontal_norm_1(cubgame);
-	cubgame->dis_t *= cos(radian(angl(cubgame->pozition - cubgame->bonus.routa)));
-	if (cubgame->bonus.z_h > 3 && cubgame->bonus.z_h != 6)
-		cubgame->bonus.r_a_y = (int)(cubgame->bonus.v_y) % 64;
-	else
-		cubgame->bonus.r_a_y = (int)(cubgame->bonus.v_x) % 64;
-	line_on_map_draw(cubgame);
-}
+
 
 void	pixel_set_unset_s_h1(t_cubd *cubgame, int i, int j, int c)
 {
@@ -407,7 +348,6 @@ void	to_player_start_init_fo_norm(t_cubd *cubgame, double x, double y)
 		i++;
 	}
 }
-
 
 void	to_player_start_init(t_cubd *cubgame)
 {
@@ -534,29 +474,32 @@ void	render_for_map_e_s(t_cubd *cubgame)
 
 void	vertical_and_horizontal_check(t_cubd *cubgame)
 {
-	game_drow1_sprite(cubgame);
+	
+//		init_game_sprite
 	vertical(cubgame);		//?????????????????????????
 
 
-
-
 	mlx_put_image_to_window(cubgame->init_mlx, cubgame->window, cubgame->create_fon, 0, 0);//mini map put ekran
-	rener_mip(cubgame->grafic,cubgame);    //mini map
-	render_for_map_e_s(cubgame);
+	// rener_mip(cubgame->grafic,cubgame);    //mini map
+	// render_for_map_e_s(cubgame);
 }
 
-int	game_drow(t_cubd *cubgame)
+void	time(t_cubd *cubgame)
 {
 	cubgame->timer++;
-	if (cubgame->timer % 20)
+	if (cubgame->timer % 20 == 0)
 	{
 		if (cubgame->sprite == '1')
 			cubgame->sprite = '2';
 		else
 			cubgame->sprite = '1';
 	}
-	if (cubgame->timer > 200)
-		cubgame->timer = 0;
+	if (cubgame->timer >= 401)
+		cubgame->timer = 1;
+}
+
+void	maprender(t_cubd *cubgame)
+{
 	if (cubgame->create_fon)
 		mlx_destroy_image(cubgame->init_mlx, cubgame->create_fon);
 	cubgame->create_fon = mlx_new_image(cubgame->init_mlx, cubgame->w_screen, cubgame->h_screen);
@@ -566,8 +509,39 @@ int	game_drow(t_cubd *cubgame)
 		&cubgame->line_length[1], &cubgame->endian[1]);
 	if (!cubgame->ad[1])
 		exit_and_distroy1(cubgame, "ERROR: mlx2\n");
+}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int	game_drow(t_cubd *cubgame)
+{
+
+	// time(cubgame);
+//time
+	maprender(cubgame);
+	//game_drow1_sprite(cubgame);
+// /		/ ft_map_render
+
+	
 	vertical_and_horizontal_check(cubgame);
 	return (0);
 }

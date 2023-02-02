@@ -9,25 +9,41 @@ void	set_nol(int i, int j, t_cubd *cubgame, char c)
 	while (j-- > 0)
 		g = g->next;
 	s = g->content;
+	printf("%s\n", s);
 	s[i] = c;
 }
 
-void	s_read(int i, int j, t_cubd *cubgame, char *s)
+char	s_read(int i, int j, t_cubd *cubgame)
 {
-	t_list	*g;
-	char	*s1;
+	t_list	*map;
+	char	*s;
 
-	if (i > 0 && j > 0 && i < cubgame->width && j < cubgame->height)
+	if (i < 0 || j < 0 || i >= cubgame->width || j >= cubgame->height)
+		return (' ');
+	map = cubgame->grafic;
+	while (j > 0)
 	{
-		g = cubgame->grafic;
-		while (j-- > 0)
-			g = g->next;
-		s1 = (char *)g->content;
-		*s = s1[i];
+		j--;
+		map = map->next;
 	}
-	else
-		*s = ' ';
+	s = map->content;
+	return (s[i]);
 }
+// {
+// 	t_list	*g;
+// 	char	*s1;
+
+// 	if (i >= 0 && j >= 0 && i < cubgame->width && j < cubgame->height)
+// 	{
+// 		g = cubgame->grafic;
+// 		while (j-- > 0)
+// 			g = g->next;
+// 		s1 = (char *)g->content;
+// 		*s = s1[i];
+// 	}
+// 	else
+// 		*s = ' ';
+// }
 
 void	func_w(t_cubd	*cubgame)
 {
@@ -37,7 +53,7 @@ void	func_w(t_cubd	*cubgame)
 
 	i = cubgame->px + (cubgame->dx * 0.2);
 	j = cubgame->py + (cubgame->dy  * 0.2);
-	s_read(i, j, cubgame, &s);
+	s = s_read(i, j, cubgame);
 	if (s != '0' && s != 'K')
 		return ;
 	if (s == 'K')
@@ -46,9 +62,10 @@ void	func_w(t_cubd	*cubgame)
 		cubgame->sprite = '0';
 		set_nol(i, j, cubgame, '0');
 	}
-	cubgame->px = i;
-	cubgame->py = j;
-	cubgame->steps++;
+	cubgame->px += (cubgame->dx * 0.1);
+	cubgame->py += (cubgame->dy * 0.1);
+	if (cubgame->steps)
+		cubgame->steps += 1;
 }
 
 void	func_a(t_cubd	*cubgame)
@@ -59,7 +76,7 @@ void	func_a(t_cubd	*cubgame)
 
 	i = cubgame->px + (cubgame->dy / 5);
 	j = cubgame->py - (cubgame->dx / 5);
-	s_read(i, j, cubgame, &s);
+	s = s_read(i, j, cubgame);
 	if (s != '0' && s != 'K')
 		return ;
 	if (s == 'K')
@@ -81,7 +98,7 @@ void	func_s(t_cubd	*cubgame)
 
 	i = cubgame->px - (cubgame->dy / 5);
 	j = cubgame->py - (cubgame->dx / 5);
-	s_read(i, j, cubgame, &s);
+	s = s_read(i, j, cubgame);
 	if (s != '0' && s != 'K')
 		return ;
 	if (s == 'K')
@@ -103,7 +120,7 @@ void	func_d(t_cubd	*cubgame)
 
 	i = cubgame->px - (cubgame->dy / 5);
 	j = cubgame->py + (cubgame->dx / 5);
-	s_read(i, j, cubgame, &s);
+	s = s_read(i, j, cubgame);
 	if (s != '0' && s != 'K')
 		return ;
 	if (s == 'K')
@@ -185,7 +202,7 @@ void	func_e(t_cubd	*cubgame)
 
 	i = cubgame->px + (cubgame->dy / 5);
 	j = cubgame->py + (cubgame->dx / 5);
-	s_read(i, j, cubgame, &s);
+	s = s_read(i, j, cubgame);
 	if (s == 'D' && cubgame->symbol == '1')
 		func_open_dor(cubgame, i, j, s);
 	else
@@ -223,6 +240,7 @@ void	key_l_r(t_cubd	*cubgame, int keyx)
 
 int	key(t_cubd	*cubgame, int keyx)
 {
+	printf("key\n");
 	if (keyx == 13)
 		func_w(cubgame);
 	else if (keyx == 1)

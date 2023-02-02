@@ -101,6 +101,7 @@ typedef	struct	cub3d
 	int			h_screen;
 	int			w_screen;
 	void		*minimap;
+	int			zeros;
 	t_bonus		bonus;
 	t_list		*grafic;
 }				t_cubd;
@@ -123,7 +124,23 @@ int		exit_and_distroy(t_cubd	*cubgame);
 int		key(t_cubd	*cubgame, int keyx);
 int		game_drow(t_cubd *cubgame);
 void	exit_and_distroy1(t_cubd	*cubgame, char *str);
-void	s_read(int i, int j, t_cubd *cubgame, char *s);
 void	horizontal(t_cubd *cubgame);
+void	aaaaaaaa2(t_cubd *cubgame);
+void	 vertical_start(t_cubd *cubgame);
+char	get_map_sym(int mx, int my, t_cubd *cubgame);
+void	func_cos_vert_minus(t_cubd *cubgame);
+void	func_cos_vert_noll(t_cubd *cubgame);
+void	vertical_s_d_r_norm(t_cubd *cubgame, char s);
+void	game_drow2_vertical(t_cubd *cubgame);
+char	s_read(int i, int j, t_cubd *cubgame);
+void	func_cos_vert_plus(t_cubd *cubgame);
+void	horizontal(t_cubd *cubgame);
+void	horiontal_norm_1(t_cubd *cubgame);
+void	horizontal_have_dor(t_cubd *cubgame, char s);
+void	horizon_pozition_y_nol(t_cubd *cubgame);
+void	horizon_pozition_y_minus(t_cubd *cubgame);
+void	horizon_pozition_y_plus(t_cubd *cubgame);
+double	angl(double	t);
+void	line_on_map_draw(t_cubd *cubgame);
 
 #endif

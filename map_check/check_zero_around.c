@@ -79,7 +79,7 @@ void	when_around_have_space(t_cubd *cubgame, char	*str1, char *str2, char *str3)
 {
 	int	k;
 
-	k = cubgame->i;
+	k = cubgame->zeros;
 	if (!str2[k] || str2[k] == 32 || !str2[k - 1] || str2[k - 1] == 32
 		|| !str2[k + 1] || str2[k + 1] == '\n'
 		|| str2[k + 1] == 32 || !str1[k] || str1[k] == 32 || !str1[k - 1]
@@ -95,7 +95,7 @@ void	check_zero_around(t_cubd *cubgame, char	*str1, char *str2, char *str3)
 {
 	int	k;
 
-	k = cubgame->i;
+	k = cubgame->zeros;
 	cubgame->have_zerro = when_have_zerro(str2);
 	when_around_have_space(cubgame, str1, str2, str3);
 	if (str2[k] == 48 && str2[k + 1] == '1' && str2[k - 1] == '1'

@@ -65,9 +65,9 @@ void	map_read(t_cubd	*cubgame, int fd)
 	else if (cubgame->line[i] == 'E' && cubgame->line[i + 1] == 'A')
 		ft_texture(cubgame, cubgame->line + i + 2, 'E');
 	else if (cubgame->line[i] == 'C' && cubgame->line[i + 1] == ' ')
-		floor_or_ceiling(cubgame, cubgame->line + i + 1, 'F');
-	else if (cubgame->line[i] == 'F' && cubgame->line[i + 1] == ' ')
 		floor_or_ceiling(cubgame, cubgame->line + i + 1, 'C');
+	else if (cubgame->line[i] == 'F' && cubgame->line[i + 1] == ' ')
+		floor_or_ceiling(cubgame, cubgame->line + i + 1, 'F');
 	else if (cubgame->line[i] == '1')
 		map_one(cubgame, fd);
 	else if (cubgame->line[i] && cubgame->line[i] != '\n')

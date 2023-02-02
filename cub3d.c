@@ -12,11 +12,17 @@ void	func_null1(t_cubd *cubgame)
 }
 void	func_null(t_cubd *cubgame)
 {
+	int i;
+	i = 0;
 	cubgame->ea = NULL;
 	cubgame->line = NULL;
+	cubgame->dx = 0;
+	cubgame->dy = 0;
 	cubgame->no = NULL;
 	cubgame->so = NULL;
 	cubgame->grafic = NULL;
+	cubgame->px = 0;
+	cubgame->py = 0;
 	cubgame->s = 0;
 	cubgame->w = 0;
 	cubgame->x = 0;
@@ -33,7 +39,19 @@ void	func_null(t_cubd *cubgame)
 	cubgame->h_screen = 1000;
 	cubgame->w_screen = 1000;
 	cubgame->step_flag = 0;
+	cubgame->a_l = 60.0 / cubgame->w_screen;
 	cubgame->minimap = NULL;
+	cubgame->init_mlx = NULL;
+	cubgame->dur = 0;
+	cubgame->key1 = 0;
+	cubgame->key2 = 0;
+	cubgame->window = 0;
+	cubgame->create_fon = 0;
+	while (i < 9)
+	{
+		cubgame->ad[i] = NULL;
+		i++;
+	}
 	func_null1(cubgame);
 }
 
