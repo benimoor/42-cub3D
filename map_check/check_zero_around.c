@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_zero_around.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hvardany <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/09 23:04:36 by hvardany          #+#    #+#             */
+/*   Updated: 2023/02/09 23:04:41 by hvardany         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../cub3d.h"
 
 int	when_have_zerro(char	*str)
@@ -21,12 +33,12 @@ void	when_all_zerro(t_cubd *cubgame, char	*str1, char *str2, char *str3)
 	k = cubgame->i;
 	if (str2[k] == '0')
 	{
-		if (cubgame->symbol == '0' && str1[k] == '0' && str1[k + 1] == '0'
+		if (cubgame->is_key == '0' && str1[k] == '0' && str1[k + 1] == '0'
 			&& str1[k - 1] == '0' && str2[k] == '0' && str2[k + 1] == '0'
 			&& str2[k - 1] == '0' && str3[k] == '0' && str3[k + 1] == '0'
 			&& str3[k - 1] == '0')
 		{
-			cubgame->symbol = '1';
+			cubgame->is_key = '1';
 			str2[k] = 'K';
 			cubgame->keypx = k;
 		}
@@ -57,51 +69,20 @@ void	check_around(t_cubd *cubgame, char	*str1, char *str2, char *str3)
 
 	k = cubgame->i;
 	if (str2[k] && char_walid1(str2[k]) && !char_walid(str2[k + 1]))
-	 	exit_game(cubgame, "ERROR: 1invalid map\n");
-	 if (str2[k] && char_walid1(str2[k]) && !char_walid(str2[k - 1]))
-	 {
-		printf("%c %c %c \n", str2[k-1], str1[k-1], str3[k - 1]);
+		exit_game(cubgame, "ERROR: 1invalid map\n");
+	if (str2[k] && char_walid1(str2[k]) && !char_walid(str2[k - 1]))
+	{
 		exit_game(cubgame, "ERROR: 2invalid map\n");
-	 }
-	 if (str2[k] && char_walid1(str2[k]) && !char_walid(str1[k + 1]))
-	 	exit_game(cubgame, "ERROR: 3invalid map\n");
-	 if (str2[k] && char_walid1(str2[k]) && !char_walid(str1[k - 1]))
-	 	exit_game(cubgame, "ERROR: 4invalid map\n");
-	 if (str2[k] && char_walid1(str2[k]) && !char_walid(str3[k - 1]))
-	 	exit_game(cubgame, "ERROR: 5invalid map\n");
-	 if (str2[k] && char_walid1(str2[k]) && !char_walid(str3[k + 1]))
-	 	exit_game(cubgame, "ERROR: 6invalid map\n");
-	if (char_walid1(str2[k]) && (ft_strlen(str1) < (size_t)(k + 1) || ft_strlen(str3) < (size_t)(k + 1)))
+	}
+	if (str2[k] && char_walid1(str2[k]) && !char_walid(str1[k + 1]))
+		exit_game(cubgame, "ERROR: 3invalid map\n");
+	if (str2[k] && char_walid1(str2[k]) && !char_walid(str1[k - 1]))
+		exit_game(cubgame, "ERROR: 4invalid map\n");
+	if (str2[k] && char_walid1(str2[k]) && !char_walid(str3[k - 1]))
+		exit_game(cubgame, "ERROR: 5invalid map\n");
+	if (str2[k] && char_walid1(str2[k]) && !char_walid(str3[k + 1]))
+		exit_game(cubgame, "ERROR: 6invalid map\n");
+	if (char_walid1(str2[k]) && (ft_strlen(str1) < (size_t)(k + 1)
+		|| ft_strlen(str3) < (size_t)(k + 1)))
 		exit_game(cubgame, "ERROR: 7invalid map\n");
-}
-
-void	when_around_have_space(t_cubd *cubgame, char	*str1, char *str2, char *str3)
-{
-	int	k;
-
-	k = cubgame->zeros;
-	if (!str2[k] || str2[k] == 32 || !str2[k - 1] || str2[k - 1] == 32
-		|| !str2[k + 1] || str2[k + 1] == '\n'
-		|| str2[k + 1] == 32 || !str1[k] || str1[k] == 32 || !str1[k - 1]
-		|| str1[k - 1] == 32 || !str1[k + 1] || str1[k + 1] == '\n'
-		|| str1[k + 1] == 32 || !str3[k] || str3[k] == 32 || !str3[k - 1]
-		|| str3[k - 1] == 32 || !str3[k + 1] || str3[k + 1] == '\n'
-		|| str3[k + 1] == 32)
-	 exit_game(cubgame, "ERROR: 123invalid map\n");
-	 check_around(cubgame, str1, str2, str3);
-}
-
-void	check_zero_around(t_cubd *cubgame, char	*str1, char *str2, char *str3)
-{
-	int	k;
-
-	k = cubgame->zeros;
-	cubgame->have_zerro = when_have_zerro(str2);
-	when_around_have_space(cubgame, str1, str2, str3);
-	if (str2[k] == 48 && str2[k + 1] == '1' && str2[k - 1] == '1'
-		&& str3[k] == 48 && str1[k] == 48
-		&& (str1[k + 1] == '1' || str3[k +1] == '1'))
-	str2[k] = 'D';
-	else
-		when_all_zerro(cubgame, str1, str2, str3);
 }
